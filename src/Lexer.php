@@ -138,22 +138,18 @@ final class Lexer extends AbstractLexer
         }
 
         if ($this->isBooleanToken($value)) {
-            $value = \strtolower($value) === 'true';
+            $value = \strtolower($value);
 
             return self::T_BOOLEAN;
         }
 
         if ($this->isNullToken($value)) {
-            $value = null;
+            $value = \strtolower($value);
 
             return self::T_NULL;
         }
 
         if (\is_numeric($value)) {
-            if (\is_string($value)) {
-                $value = (\strpos($value, '.') === false) ? (int) $value : (float) $value;
-            }
-
             return self::T_NUMBER;
         }
 

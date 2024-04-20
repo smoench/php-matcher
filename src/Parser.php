@@ -8,6 +8,7 @@ use Coduo\PHPMatcher\Exception\Exception;
 use Coduo\PHPMatcher\Exception\PatternException;
 use Coduo\PHPMatcher\Matcher\Pattern;
 use Coduo\PHPMatcher\Parser\ExpanderInitializer;
+use Doctrine\Common\Lexer\Token;
 
 final class Parser
 {
@@ -66,8 +67,8 @@ final class Parser
 
         $pattern = null;
 
-        if ($this->lexer->lookahead['type'] == Lexer::T_TYPE_PATTERN) {
-            $pattern = new AST\Pattern(new AST\Type($this->lexer->lookahead['value']));
+        if ($this->lexer->lookahead->type == Lexer::T_TYPE_PATTERN) {
+            $pattern = new AST\Pattern(new AST\Type($this->lexer->lookahead->value));
         } else {
             throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, '@type@ pattern'));
         }
@@ -119,23 +120,19 @@ final class Parser
 
     private function getExpanderName() : string
     {
-        if ($this->lexer->lookahead['type'] !== Lexer::T_EXPANDER_NAME) {
-            throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, '.expanderName(args) definition'));
+        $lookahead = $this->lexer->lookahead;
+
+        if ($lookahead === null) {
+            throw PatternException::syntaxError($this->unexpectedSyntaxError($lookahead, '.expanderName(args) definition'));
         }
 
-        $expander = $this->lexer->lookahead['value'];
-
-        if ($expander === null) {
-            throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, '.expanderName(args) definition'));
+        if ($lookahead->type !== Lexer::T_EXPANDER_NAME) {
+            throw PatternException::syntaxError($this->unexpectedSyntaxError($lookahead, '.expanderName(args) definition'));
         }
 
         $this->lexer->moveNext();
 
-        if (\is_int($expander)) {
-            return (string) $expander;
-        }
-
-        return $expander;
+        return $lookahead->value;
     }
 
     /**
@@ -144,8 +141,9 @@ final class Parser
     private function addArgumentValues(AST\Expander $expander) : void
     {
         while (($argument = $this->getNextArgumentValue()) !== null) {
-            $argument = ($argument === self::NULL_VALUE) ? null : $argument;
-            $expander->addArgument($argument);
+            $coercedArgument = $this->coerceArgumentValue($argument);
+
+            $expander->addArgument($coercedArgument);
 
             if (!$this->lexer->isNextToken(Lexer::T_COMMA)) {
                 break;
@@ -157,6 +155,33 @@ final class Parser
                 throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, 'string, number, boolean or null argument'));
             }
         }
+    }
+
+    private function coerceArgumentValue(mixed $argument) : mixed
+    {
+        $coercedArgument = $argument;
+
+        if (\is_string($argument)) {
+            $lowercaseArgument = \strtolower($argument);
+
+            if ($lowercaseArgument === self::NULL_VALUE) {
+                $coercedArgument = null;
+            } elseif ($lowercaseArgument === 'true') {
+                $coercedArgument = true;
+            } elseif ($lowercaseArgument === 'false') {
+                $coercedArgument = false;
+            } elseif (\is_numeric($argument)) {
+                $coercedArgument = (\strpos($argument, '.') === false) ? (int) $argument : (float) $argument;
+            }
+        } elseif (\is_array($argument)) {
+            $coercedArgument = [];
+
+            foreach ($argument as $key => $arg) {
+                $coercedArgument[$key] = $this->coerceArgumentValue($arg);
+            }
+        }
+
+        return $coercedArgument;
     }
 
     /**
@@ -187,8 +212,8 @@ final class Parser
             throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, 'string, number, boolean or null argument'));
         }
 
-        $tokenType = $this->lexer->lookahead['type'];
-        $argument = $this->lexer->lookahead['value'];
+        $tokenType = $this->lexer->lookahead->type;
+        $argument = $this->lexer->lookahead->value;
         $this->lexer->moveNext();
 
         if ($tokenType === Lexer::T_NULL) {
@@ -258,15 +283,15 @@ final class Parser
     }
 
     /**
-     * @param mixed $unexpectedToken
+     * @param ?Token<Lexer::T_*, string> $unexpectedToken
      * @param string $expected
      */
     private function unexpectedSyntaxError($unexpectedToken, string $expected = null) : string
     {
-        $tokenPos = (isset($unexpectedToken['position'])) ? $unexpectedToken['position'] : '-1';
+        $tokenPos = $unexpectedToken !== null ? $unexpectedToken->position : '-1';
         $message  = \sprintf('line 0, col %d: Error: ', $tokenPos);
         $message .= (isset($expected)) ? \sprintf('Expected "%s", got ', $expected) : 'Unexpected';
-        $message .= \sprintf('"%s"', $unexpectedToken['value']);
+        $message .= \sprintf('"%s"', $unexpectedToken->value);
 
         return $message;
     }
@@ -278,7 +303,8 @@ final class Parser
      */
     private function unexpectedEndOfString(string $expected = null) : void
     {
-        $tokenPos = (isset($this->lexer->token['position'])) ? $this->lexer->token['position'] + \strlen((string) $this->lexer->token['value']) : '-1';
+        $tokenPos = (isset($this->lexer->token->position))
+            ? $this->lexer->token->position + \strlen((string) $this->lexer->token->value) : '-1';
         $message  = \sprintf('line 0, col %d: Error: ', $tokenPos);
         $message .= (isset($expected)) ? \sprintf('Expected "%s", got end of string.', $expected) : 'Unexpected';
         $message .= 'end of string';
