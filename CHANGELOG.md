@@ -1,4 +1,4 @@
-## [Unreleased] - 2024-04-25
+## [6.0.15] - 2024-04-25
 
 ### Added
 - [#478](https://github.com/coduo/php-matcher/pull/478) - **Test coverage of both expanders** - [@StephaneLeveugle](https://github.com/StephaneLeveugle)
