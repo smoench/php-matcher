@@ -19,7 +19,7 @@
         "ext-filter": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
-        "aeon-php/calendar": "^1.0",
+        "aeon-php/calendar": "^1.0.6",
         "coduo/php-to-string": "^3",
         "doctrine/lexer": "^3.0"
     },
@@ -29,6 +29,7 @@
         "openlss/lib-array2xml": "^1.0",
         "symfony/expression-language": "^2.3|^3.0|^4.0|^5.0|^6.0",
         "symfony/cache": "^2.3|^3.0|^4.0|^5.0|^6.0",
+        "nikic/php-parser": "^4.18",
         "symfony/var-exporter": "^2.3|^3.0|^4.0|^5.0|^6.0"
     },
     "suggest": {
