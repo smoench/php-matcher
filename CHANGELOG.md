@@ -1,4 +1,4 @@
-## [Unreleased] - 2024-10-07
+## [6.0.16] - 2024-10-07
 
 ### Fixed
 - [#493](https://github.com/coduo/php-matcher/pull/493) - **Fix #471** - [@GeLoLabs](https://github.com/GeLoLabs)
