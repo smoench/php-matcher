@@ -36,6 +36,11 @@ final class ChainMatcher extends Matcher
         $this->name = $name;
     }
 
+    public function registerMatcher(ValueMatcher $matcher) : void
+    {
+        $this->matchers[] = $matcher;
+    }
+
     public function match($value, $pattern) : bool
     {
         $this->backtrace->matcherEntrance($this->matcherName(), $value, $pattern);

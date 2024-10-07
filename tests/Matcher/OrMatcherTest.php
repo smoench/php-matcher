@@ -67,6 +67,14 @@ class OrMatcherTest extends TestCase
             ],
             [
                 [
+                    'test' => [],
+                ],
+                [
+                    'test' => '@array@||@null@',
+                ],
+            ],
+            [
+                [
                     'first_level' => ['second_level', ['third_level']],
                 ],
                 '@array@||@null@||@*@',

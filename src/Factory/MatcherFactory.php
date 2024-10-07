@@ -49,14 +49,12 @@ final class MatcherFactory implements Factory
 
     private function buildArrayMatcher(Matcher\ChainMatcher $scalarMatchers, Parser $parser, Backtrace $backtrace) : Matcher\ArrayMatcher
     {
-        $orMatcher = new Matcher\OrMatcher($backtrace, $scalarMatchers);
-
-        return new Matcher\ArrayMatcher(
+        $arrayMatcher = new Matcher\ArrayMatcher(
             new Matcher\ChainMatcher(
                 'array',
                 $backtrace,
                 [
-                    $orMatcher,
+                    new Matcher\OrMatcher($backtrace, $orMatchers = clone $scalarMatchers),
                     $scalarMatchers,
                     new Matcher\TextMatcher($backtrace, $parser),
                 ]
@@ -64,6 +62,9 @@ final class MatcherFactory implements Factory
             $backtrace,
             $parser
         );
+        $orMatchers->registerMatcher($arrayMatcher);
+
+        return $arrayMatcher;
     }
 
     private function buildScalarMatchers(Parser $parser, Backtrace $backtrace) : Matcher\ChainMatcher
