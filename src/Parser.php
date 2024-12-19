@@ -286,7 +286,7 @@ final class Parser
      * @param ?Token<Lexer::T_*, string> $unexpectedToken
      * @param string $expected
      */
-    private function unexpectedSyntaxError($unexpectedToken, string $expected = null) : string
+    private function unexpectedSyntaxError($unexpectedToken, ?string $expected = null) : string
     {
         $tokenPos = $unexpectedToken !== null ? $unexpectedToken->position : '-1';
         $message  = \sprintf('line 0, col %d: Error: ', $tokenPos);
@@ -301,7 +301,7 @@ final class Parser
      *
      * @throws PatternException
      */
-    private function unexpectedEndOfString(string $expected = null) : void
+    private function unexpectedEndOfString(?string $expected = null) : void
     {
         $tokenPos = (isset($this->lexer->token->position))
             ? $this->lexer->token->position + \strlen((string) $this->lexer->token->value) : '-1';
