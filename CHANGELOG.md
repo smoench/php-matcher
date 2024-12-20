@@ -1,3 +1,8 @@
+## [Unreleased] - 2024-12-20
+
+### Added
+- [#500](https://github.com/coduo/php-matcher/pull/500) - **adds support for PHP 8.4** - [@smoench](https://github.com/smoench)
+
 ## [6.0.16] - 2024-10-07
 
 ### Fixed
