@@ -5,22 +5,13 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "composer"
-    directory: "/tools/cs-fixer"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "composer"
-    directory: "/tools/infection"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "composer"
-    directory: "/tools/phpbench"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "composer"
-    directory: "/tools/phpstan"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "composer"
-    directory: "/tools/psalm"
+    directories:
+      - "/tools/cs-fixer"
+      - "/tools/infection"
+      - "/tools/phpbench"
+      - "/tools/phpstan"
+      - "/tools/psalm"
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
       interval: "monthly"

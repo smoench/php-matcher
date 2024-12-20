@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "~8.1 || ~8.2 || ~8.3",
+        "php": "~8.1 || ~8.2 || ~8.3 || ~8.4",
         "ext-filter": "*",
         "ext-json": "*",
         "ext-simplexml": "*",
@@ -47,7 +47,10 @@
         }
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.1"
+        }
     },
     "scripts": {
         "benchmark": [
@@ -79,14 +82,14 @@
             "composer install --working-dir=./tools/infection",
             "composer install --working-dir=./tools/phpbench",
             "composer install --working-dir=./tools/phpstan",
-            "composer install --working-dir=./tools/psalm"
+            "composer install --working-dir=./tools/psalm --ignore-platform-req=php"
         ],
         "tools:update": [
             "composer update --working-dir=./tools/cs-fixer",
             "composer update --working-dir=./tools/infection",
             "composer update --working-dir=./tools/phpbench",
             "composer update --working-dir=./tools/phpstan",
-            "composer update --working-dir=./tools/psalm"
+            "composer update --working-dir=./tools/psalm --ignore-platform-req=php"
         ],
         "post-install-cmd": [
             "@tools:install"

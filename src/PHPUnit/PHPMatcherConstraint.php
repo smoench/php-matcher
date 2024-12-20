@@ -17,7 +17,7 @@ final class PHPMatcherConstraint extends Constraint
 
     private PHPMatcher $matcher;
 
-    public function __construct($pattern, Backtrace $backtrace = null)
+    public function __construct($pattern, ?Backtrace $backtrace = null)
     {
         if (!\in_array(\gettype($pattern), ['string', 'array', 'object'], true)) {
             throw new \LogicException(\sprintf('The PHPMatcherConstraint pattern must be a string, closure or an array, %s given.', \gettype($pattern)));
@@ -58,7 +58,7 @@ final class PHPMatcherConstraint extends Constraint
     /**
      * {@inheritdoc}
      */
-    protected function fail($other, $description, ComparisonFailure $comparisonFailure = null) : never
+    protected function fail($other, $description, ?ComparisonFailure $comparisonFailure = null) : never
     {
         parent::fail($other, $description, $comparisonFailure ?? $this->createComparisonFailure($other));
     }
