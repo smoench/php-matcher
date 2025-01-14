@@ -1,3 +1,8 @@
+## [Unreleased] - 2025-01-14
+
+### Changed
+- [50ad4d](https://github.com/coduo/php-matcher/commit/50ad4de88c4a481bf1e26e1fa1855cfc2e5e89da) - **Create FUNDING.yml** - [@norberttech](https://github.com/norberttech)
+
 ## [6.0.17] - 2024-12-20
 
 ### Added
