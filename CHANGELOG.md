@@ -1,6 +1,7 @@
 ## [Unreleased] - 2025-01-14
 
 ### Changed
+- [ae8cdd](https://github.com/coduo/php-matcher/commit/ae8cddc1db151fefbd02dad80f3cb658ed7cd138) - **Delete .github/FUNDING.yml** - [@norberttech](https://github.com/norberttech)
 - [50ad4d](https://github.com/coduo/php-matcher/commit/50ad4de88c4a481bf1e26e1fa1855cfc2e5e89da) - **Create FUNDING.yml** - [@norberttech](https://github.com/norberttech)
 
 ### Updated
