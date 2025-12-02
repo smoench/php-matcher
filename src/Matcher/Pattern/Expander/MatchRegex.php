@@ -22,11 +22,7 @@ final class MatchRegex implements PatternExpander
 
     public function __construct(string $pattern)
     {
-        if (!\is_string($pattern)) {
-            throw new \InvalidArgumentException('Regex pattern must be a string.');
-        }
-
-        if (!\is_string($pattern) || @\preg_match($pattern, '') === false) {
+        if (@\preg_match($pattern, '') === false) {
             throw new \InvalidArgumentException('Regex pattern must be a valid one.');
         }
 

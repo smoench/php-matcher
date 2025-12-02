@@ -7,7 +7,6 @@ namespace Coduo\PHPMatcher\Matcher;
 use Coduo\PHPMatcher\Backtrace;
 use Coduo\PHPMatcher\Parser;
 use Coduo\ToString\StringConverter;
-use Symfony\Component\Validator\Constraints\Ulid;
 
 final class UlidMatcher extends Matcher
 {

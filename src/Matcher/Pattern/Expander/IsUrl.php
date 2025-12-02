@@ -53,10 +53,6 @@ final class IsUrl implements PatternExpander
 
     private function matchValue(string $value) : bool
     {
-        try {
-            return false !== \filter_var($value, FILTER_VALIDATE_URL);
-        } catch (\Exception $exception) {
-            return false;
-        }
+        return false !== \filter_var($value, FILTER_VALIDATE_URL);
     }
 }

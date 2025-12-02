@@ -17,10 +17,6 @@ trait DateTimeComparisonTrait
 
     public function __construct(string $boundary)
     {
-        if (!\is_string($boundary)) {
-            throw new \InvalidArgumentException(\sprintf('Before expander require "string", got "%s".', new StringConverter($boundary)));
-        }
-
         try {
             $this->boundary = DateTime::fromString($boundary);
         } catch (\Exception $exception) {

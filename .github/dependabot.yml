@@ -10,7 +10,6 @@ updates:
       - "/tools/infection"
       - "/tools/phpbench"
       - "/tools/phpstan"
-      - "/tools/psalm"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

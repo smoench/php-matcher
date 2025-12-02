@@ -24,10 +24,6 @@ final class EndsWith implements PatternExpander
 
     public function __construct(string $stringEnding, bool $ignoreCase = false)
     {
-        if (!\is_string($stringEnding)) {
-            throw new \InvalidArgumentException('String ending must be a valid string.');
-        }
-
         $this->stringEnding = $stringEnding;
         $this->ignoreCase = $ignoreCase;
     }

@@ -24,10 +24,6 @@ final class StartsWith implements PatternExpander
 
     public function __construct(string $stringBeginning, bool $ignoreCase = false)
     {
-        if (!\is_string($stringBeginning)) {
-            throw new \InvalidArgumentException('String beginning must be a valid string.');
-        }
-
         $this->stringBeginning = $stringBeginning;
         $this->ignoreCase = $ignoreCase;
     }
