@@ -10,22 +10,27 @@ on:
 
 jobs:
   tests:
-    name: "Tests"
-    runs-on: ${{ matrix.operating-system }}
+    name: "Tests ${{ matrix.php-version }} ${{ matrix.dependencies }} (Symfony ${{ matrix.symfony-version }})"
+    runs-on: "ubuntu-latest"
     strategy:
+      fail-fast: false
       matrix:
         dependencies:
-          - "locked"
           - "lowest"
           - "highest"
         php-version:
-          - "8.1"
-          - "8.2"
           - "8.3"
           - "8.4"
           - "8.5"
-        operating-system:
-          - "ubuntu-latest"
+        symfony-version:
+          - "5.4.*"
+          - "6.4.*"
+          - "7.3.*"
+          - "7.4.*"
+          - "8.0.*"
+        exclude:
+          - php-version: 8.3
+            symfony-version: "8.0.*"
 
     steps:
       - name: "Checkout"
@@ -37,7 +42,7 @@ jobs:
           coverage: "pcov"
           php-version: "${{ matrix.php-version }}"
           ini-values: memory_limit=-1
-          tools: composer:v2
+          tools: flex, composer:v2
 
       - name: "Get Composer Cache Directory"
         id: composer-cache
@@ -49,9 +54,12 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.dir }}
-          key: "php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-${{ hashFiles('**/composer.lock') }}"
+          key: "php-${{ matrix.php-version }}-composer-${{ hashFiles('**/composer.json **/composer.lock') }}"
           restore-keys: |
-            php-${{ matrix.php-version }}-${{ matrix.dependencies }}-composer-
+            php-${{ matrix.php-version }}-composer-
+
+      - name: "Configure Symfony"
+        run: composer config extra.symfony.require "${{ matrix.symfony-version }}"
 
       - name: "Install lowest dependencies"
         if: ${{ matrix.dependencies == 'lowest' }}
@@ -60,10 +68,6 @@ jobs:
       - name: "Install highest dependencies"
         if: ${{ matrix.dependencies == 'highest' }}
         run: "composer update --no-interaction --no-progress --no-suggest"
-
-      - name: "Install locked dependencies"
-        if: ${{ matrix.dependencies == 'locked' }}
-        run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Tests"
         run: "composer test"
@@ -79,7 +83,7 @@ jobs:
         uses: "shivammathur/setup-php@v2"
         with:
           coverage: none
-          php-version: "8.1"
+          php-version: "8.3"
           ini-values: memory_limit=-1
           tools: composer:v2
 
@@ -93,11 +97,11 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.dir }}
-          key: "php-8.1-locked-composer-${{ hashFiles('**/composer.lock') }}"
+          key: "php-8.3-composer-${{ hashFiles('**/composer.json **/composer.lock') }}"
           restore-keys: |
-            php-8.1-locked-composer-
+            php-8.3-composer-
 
-      - name: "Install locked dependencies"
+      - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Static Analyze"
@@ -115,7 +119,7 @@ jobs:
         with:
           coverage: "pcov"
           tools: composer:v2
-          php-version: "8.2"
+          php-version: "8.3"
           ini-values: memory_limit=-1
 
       - name: "Get Composer Cache Directory"
@@ -128,11 +132,11 @@ jobs:
         with:
           path: |
             ${{ steps.composer-cache.outputs.dir }}
-          key: "php-8.2-locked-composer-${{ hashFiles('**/composer.lock') }}"
+          key: "php-8.3-composer-${{ hashFiles('**/composer.json **/composer.lock') }}"
           restore-keys: |
-            php-8.2-locked-composer-
+            php-8.3-composer-
 
-      - name: "Install locked dependencies"
+      - name: "Install dependencies"
         run: "composer install --no-interaction --no-progress --no-suggest"
 
       - name: "Mutation Tests"
