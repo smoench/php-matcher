@@ -1,4 +1,4 @@
-## [Unreleased] - 2025-12-08
+## [6.0.18] - 2025-12-08
 
 ### Added
 - [#511](https://github.com/coduo/php-matcher/pull/511) - **PHP 8.5 support** - [@smoench](https://github.com/smoench)
