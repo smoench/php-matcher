@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Coduo\PHPMatcher\Matcher;
 
 use Coduo\PHPMatcher\Backtrace;
-use Coduo\PHPMatcher\Exception\Exception;
 use Coduo\PHPMatcher\Matcher\ArrayMatcher\Diff;
 use Coduo\PHPMatcher\Matcher\ArrayMatcher\Difference;
 use Coduo\PHPMatcher\Matcher\ArrayMatcher\StringDifference;
@@ -116,7 +115,6 @@ final class ArrayMatcher extends Matcher
         $pattern = null;
         $previousPattern = null;
 
-        /** @psalm-suppress InvalidArrayOffset */
         if (\in_array(self::ARRAY_PREVIOUS_PATTERN_REPEAT, $patterns, true)) {
             $patterns = \array_merge(
                 \array_replace($patterns, [\array_search(self::ARRAY_PREVIOUS_PATTERN_REPEAT, $patterns, true) => self::ARRAY_PREVIOUS_PATTERN]),
@@ -223,7 +221,7 @@ final class ArrayMatcher extends Matcher
 
             try {
                 $typePattern = $this->parser->parse($pattern);
-            } catch (Exception | \Throwable $e) {
+            } catch (\Throwable) {
                 return true;
             }
 

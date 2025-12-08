@@ -53,10 +53,6 @@ final class IsEmail implements PatternExpander
 
     private function matchValue(string $value) : bool
     {
-        try {
-            return false !== \filter_var($value, FILTER_VALIDATE_EMAIL);
-        } catch (\Exception $exception) {
-            return false;
-        }
+        return false !== \filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 }

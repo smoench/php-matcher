@@ -7,6 +7,7 @@ namespace Coduo\PHPMatcher\PHPUnit;
 use Coduo\PHPMatcher\Backtrace;
 use PHPUnit\Framework\TestCase;
 
+/** @phpstan-ignore trait.unused */
 trait PHPMatcherAssertions
 {
     protected ?Backtrace $backtrace = null;

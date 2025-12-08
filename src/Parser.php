@@ -40,14 +40,14 @@ final class Parser
 
     public function parse(string $pattern) : Pattern\TypePattern
     {
-        $AST = $this->getAST($pattern);
-        $pattern = new Pattern\TypePattern((string) $AST->getType());
+        $ast = $this->getAST($pattern);
+        $typePattern = new Pattern\TypePattern((string) $ast->getType());
 
-        foreach ($AST->getExpanders() as $expander) {
-            $pattern->addExpander($this->expanderInitializer->initialize($expander));
+        foreach ($ast->getExpanders() as $expander) {
+            $typePattern->addExpander($this->expanderInitializer->initialize($expander));
         }
 
-        return $pattern;
+        return $typePattern;
     }
 
     public function getAST(string $pattern) : AST\Pattern
@@ -65,17 +65,17 @@ final class Parser
     {
         $this->lexer->moveNext();
 
-        $pattern = null;
-
-        if ($this->lexer->lookahead->type == Lexer::T_TYPE_PATTERN) {
-            $pattern = new AST\Pattern(new AST\Type($this->lexer->lookahead->value));
-        } else {
-            throw PatternException::syntaxError($this->unexpectedSyntaxError($this->lexer->lookahead, '@type@ pattern'));
+        if ($this->lexer->lookahead->type !== Lexer::T_TYPE_PATTERN) {
+            throw PatternException::syntaxError(
+                $this->unexpectedSyntaxError($this->lexer->lookahead, '@type@ pattern')
+            );
         }
+
+        $pattern = new AST\Pattern(new AST\Type($this->lexer->lookahead->value));
 
         $this->lexer->moveNext();
 
-        if (!$this->endOfPattern() && $pattern instanceof AST\Pattern) {
+        if (!$this->endOfPattern()) {
             $this->addExpanderNodes($pattern);
         }
 
