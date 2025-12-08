@@ -85,7 +85,7 @@ final class BacktraceTest extends TestCase
         );
 
         // Uncomment when backtrace logic changes, run tests and then commit again.
-        \file_put_contents(__DIR__ . '/BacktraceTest/failed_complex_matching_expected_trace.txt', (string) $this->matcher->backtrace());
+        //\file_put_contents(__DIR__ . '/BacktraceTest/failed_complex_matching_expected_trace.txt', (string) $this->matcher->backtrace());
 
         $this->assertSame(
             \file_get_contents(__DIR__ . '/BacktraceTest/failed_complex_matching_expected_trace.txt'),
@@ -141,7 +141,7 @@ final class BacktraceTest extends TestCase
         );
 
         // Uncomment when backtrace logic changes, run tests and then commit again.
-        \file_put_contents(__DIR__ . '/BacktraceTest/succeed_complex_matching_expected_trace.txt', (string) $this->matcher->backtrace());
+        //\file_put_contents(__DIR__ . '/BacktraceTest/succeed_complex_matching_expected_trace.txt', (string) $this->matcher->backtrace());
 
         $this->assertSame(
             \file_get_contents(__DIR__ . '/BacktraceTest/succeed_complex_matching_expected_trace.txt'),
